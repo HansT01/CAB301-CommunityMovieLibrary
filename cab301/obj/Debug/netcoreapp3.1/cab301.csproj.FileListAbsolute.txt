@@ -1,0 +1,14 @@
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.exe
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.deps.json
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.runtimeconfig.json
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.runtimeconfig.dev.json
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.dll
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.pdb
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.csproj.AssemblyReference.cache
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.GeneratedMSBuildEditorConfig.editorconfig
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.AssemblyInfoInputs.cache
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.AssemblyInfo.cs
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.csproj.CoreCompileInputs.cache
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.dll
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.pdb
+E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.genruntimeconfig.cache
