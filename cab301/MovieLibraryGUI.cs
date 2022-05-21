@@ -17,6 +17,19 @@ namespace cab301
             while (MainMenu());
         }
 
+        private void OptionSelect(string[] options, string option0 = null)
+        {
+            int[] indexRange = new int[options.Length];
+            for (int i = 0; i < options.Length; i++)
+            {
+                indexRange[i] = i + 1;
+                Console.WriteLine($"{i + 1}. {options[i]}");
+            }
+            if (option0 != null) Console.WriteLine($"0. {option0}");
+            string option0Str = (option0 != null) ? "/0" : "";
+            Console.WriteLine($"\nEnter your choice ==> ({string.Join("/", indexRange) + option0Str})");
+        }
+
         private bool MainMenu()
         {
             Console.Clear();
@@ -27,24 +40,20 @@ namespace cab301
                 "============================================================",
                 " ",
                 "========================Main Menu===========================",
-                " ",
-                "1. Staff Login",
-                "2. Member Login",
-                "0. Exit",
-                " ",
-                "Enter your choice ==> (1/2/0)"
+                " "
             ));
-
-            int input = Convert.ToInt32(Console.ReadLine());
-            switch (input)
+            OptionSelect(new string[] { "Staff Login", "Member Login" }, "Exit");
+            switch (Convert.ToInt32(Console.ReadLine()))
             {
                 case 1:
+                    // Staff login
                     if (VerifyStaff())
                     {
                         while (StaffMenu()) ;
                     }
                     return true;
                 case 2:
+                    // Member login
                     if (members.Number <= 0)
                     {
                         Console.Clear();
@@ -59,8 +68,10 @@ namespace cab301
                     }
                     return true;
                 case 0:
+                    // Exit
                     return false;
                 default:
+                    // Re-render frame
                     return true;
             }
         }
@@ -71,20 +82,17 @@ namespace cab301
             Console.WriteLine(string.Join(
                 Environment.NewLine,
                 "========================Staff Menu==========================",
-                " ",
-                "1. Add new DVDs of a new movie to the system",
-                "2. Remove DVDs of a movie from the system",
-                "3. Register a new member with the system",
-                "4. Remove a resitered member from the system",
-                "5. Remove a resitered member from the system",
-                "6. Display all members who are currently renting a particular movie",
-                "0. Return to the main menu",
-                " ",
-                "Enter your choice ==> (1/2/3/4/5/6/0)"
+                " "
             ));
-
-            int input = Convert.ToInt32(Console.ReadLine());
-            switch (input)
+            OptionSelect(new string[] {
+                "Add new DVDs of a new movie to the system",
+                "Remove DVDs of a movie from the system",
+                "Register a new member with the system",
+                "Remove a resitered member from the system",
+                "Remove a resitered member from the system",
+                "Display all members who are currently renting a particular movie"
+            }, "Return to the main menu");
+            switch (Convert.ToInt32(Console.ReadLine()))
             {
                 case 1:
                     // Add new DVDs of a new movie to the system
@@ -113,6 +121,8 @@ namespace cab301
             }
         }
 
+        // TODO if movie already exist, this method should just increase available copies
+        // instead of adding a new movie instance
         private bool AddMovie()
         {
             object SelectEnum(Type enumType)
@@ -193,15 +203,13 @@ namespace cab301
                     Environment.NewLine,
                     "Would you like to add the new movie:",
                     $"{movie.ToString()}",
-                    " ",
-                    "1. Add movie and exit menu",
-                    "2. Redo input fields without adding movie",
-                    "0. Exit without adding movie",
-                    " ",
-                    "Enter your choice ==> (1/2/0)"
+                    " "
                 ));
-                int input = int.Parse(Console.ReadLine());
-                switch (input) {
+                OptionSelect(new string[] {
+                    "Add movie and exit menu",
+                    "Redo input fields without adding movie"
+                }, "Exit without adding movie");
+                switch (int.Parse(Console.ReadLine())) {
                     case 1:
                         movies.Insert(movie);
                         return false;
@@ -221,20 +229,18 @@ namespace cab301
             Console.WriteLine(String.Join(
                 Environment.NewLine,
                 "======================Member Menu==========================",
-                " ",
-                "1. Browse all the movies",
-                "2. Display all the information about a movie, given the title of the movie",
-                "3. Borrow a movie DVD",
-                "4. Return a movie DVD",
-                "5. List current borrowing movies",
-                "6. Display the top 3 movies rented by the members",
-                "0. Return to the main menu",
-                " ",
-                "Enter your choice ==> (1/2/3/4/5/6/0)"
+                " "
             ));
 
-            int input = Convert.ToInt32(Console.ReadLine());
-            switch (input)
+            OptionSelect(new string[] {
+                "Browse all the movies",
+                "Display all the information about a movie, given the title of the movie",
+                "Borrow a movie DVD",
+                "Return a movie DVD",
+                "List current borrowing movies",
+                "Display the top 3 movies rented by the members",
+            }, "Return to the main menu");
+            switch (Convert.ToInt32(Console.ReadLine()))
             {
                 case 1:
                     // Browse all the movies
@@ -327,7 +333,13 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Movies the current users is currently borrowing: ");
 
+            // ToArray() method has a time complexity of O(n)
             IMovie[] movieList = movies.ToArray();
+
+            // Looping through the list of movies and searching for a member has a time complexity of O(nlog(m))
+            // Where m is the number borrowers of a movie
+            // This could easily be O(1) if borrowed movies were stored in the Member object
+            // Or even O(n) if Members were stored in a hash map.
             IMovie[] borrowedMovies = new IMovie[movieList.Length];
             int count = 0;
             for (int i = 0; i < movieList.Length; i++)
