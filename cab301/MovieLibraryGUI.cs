@@ -7,13 +7,13 @@ namespace cab301
 {
     class MovieLibraryGUI
     {
-        MovieCollection movies;
-        MemberCollection members;
+        private readonly MovieCollection movies;
+        private readonly MemberCollection members;
 
-        public MovieLibraryGUI()
+        public MovieLibraryGUI(MovieCollection movies, MemberCollection members)
         {
-            this.movies = new MovieCollection();
-            this.members = new MemberCollection(1000);
+            this.movies = movies;
+            this.members = members;
             while (MainMenu());
         }
 
@@ -39,19 +39,23 @@ namespace cab301
             switch (input)
             {
                 case 1:
-                    while (!VerifyUser("staff"));
-                    while (StaffMenu());
+                    if (VerifyStaff())
+                    {
+                        while (StaffMenu()) ;
+                    }
                     return true;
                 case 2:
-                    if (members.Number > 0)
-                    {
-                        while (!VerifyUser("member")) ;
-                        while (MemberMenu()) ;
-                    } else
+                    if (members.Number <= 0)
                     {
                         Console.Clear();
                         Console.WriteLine("There is no register members in the system yet!");
                         Console.ReadLine();
+                        return true;
+                    }
+                    IMember member = VerifyMember();
+                    if (member != null)
+                    {
+                        while (MemberMenu(member)) ;
                     }
                     return true;
                 case 0:
@@ -211,7 +215,7 @@ namespace cab301
             }
         }
 
-        private bool MemberMenu()
+        private bool MemberMenu(IMember member)
         {
             Console.Clear();
             Console.WriteLine(String.Join(
@@ -234,48 +238,197 @@ namespace cab301
             {
                 case 1:
                     // Browse all the movies
-                    while(BrowseMovies());
+                    while (BrowseMovies()) ;
                     return true;
                 case 2:
                     // Display all the information about a movie, given the title of the movie
+                    while (DisplayMovieInformation()) ;
                     return true;
                 case 3:
                     // Borrow a movie DVD
+                    while (BorrowMovie(member)) ;
                     return true;
                 case 4:
                     // Return a movie DVD
+                    while (ReturnMovie(member)) ;
                     return true;
                 case 5:
                     // List current borrowing movies
+                    while (ListBorrowingMovies(member)) ;
                     return true;
                 case 6:
                     // Display the top 3 movies rented by the members
+                    while (ListTopMovies(3)) ;
                     return true;
                 case 0:
                     // Return to the main menu
                     return false;
                 default:
+                    // Re-render menu
                     return true;
             }
+        }
+
+        // IComparer class that allows for comparing duplicate keys
+        // https://stackoverflow.com/questions/5716423/c-sharp-sortable-collection-which-allows-duplicate-keys
+        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable
+        {
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                if (result == 0) return 1;
+                return result;
+            }
+        }
+
+        // Renders the top k movies by number of borrowings
+        private bool ListTopMovies(int k)
+        {
+            Console.Clear();
+            Console.WriteLine($"Top {k} movies rented by members: ");
+
+            // ToArray() method has a time complexity of O(n)
+            IMovie[] movieList = movies.ToArray();
+
+            // SortedList insert method is O(nlog(m)), where m is the number of elements in the list
+            // Since m is always less than k, this method has a time complexity of O(n)
+            SortedList<int, IMovie> sortedList = new SortedList<int, IMovie>(new DuplicateKeyComparer<int>());
+            for (int i = 0; i < movieList.Length; i++)
+            {
+                sortedList.Add(movieList[i].NoBorrowings, movieList[i]);
+                if (sortedList.Count > k)
+                {
+                    // Remove the movie with the least borrowers
+                    // Voodoo magic
+                    sortedList.RemoveAt(0);
+                }
+            }
+
+            // Get the top movies in descending order by borrower count
+            IMovie[] topMovies = new IMovie[k];
+            int iterator = k - 1;
+            foreach (KeyValuePair<int, IMovie> pair in sortedList)
+            {
+                topMovies[iterator] = pair.Value;
+                iterator--;
+            }
+
+            for (int i = 0; i < topMovies.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. '{topMovies[i].Title}' with {topMovies[i].NoBorrowings} borrowings");
+            }
+
+            EnterToGoBack();
+            return false;
+        }
+
+        private bool ListBorrowingMovies(IMember member)
+        {
+            Console.Clear();
+            Console.WriteLine("Movies the current users is currently borrowing: ");
+
+            IMovie[] movieList = movies.ToArray();
+            IMovie[] borrowedMovies = new IMovie[movieList.Length];
+            int count = 0;
+            for (int i = 0; i < movieList.Length; i++)
+            {
+                if (movieList[i].Borrowers.Search(member))
+                {
+                    borrowedMovies[count] = movieList[i];
+                    count++;
+                }
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine(borrowedMovies[i].ToString());
+            }
+
+            EnterToGoBack();
+            return false;
+        }
+
+        private bool ReturnMovie(IMember member)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the title of the movie you would like to return: ");
+            string movieTitle = Console.ReadLine();
+
+            IMovie movie = movies.Search(movieTitle);
+            if (movie != null)
+            {
+                if (movie.RemoveBorrower(member))
+                {
+                    Console.WriteLine($"Removed member '{member.LastName}, {member.FirstName}' from '{movie.Title}'.");
+                }
+                else
+                {
+                    Console.WriteLine($"User '{member.LastName}, {member.FirstName}' does not have a copy of '{movie.Title}'.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"No movie titled '{movieTitle}' was found.");
+            }
+            EnterToGoBack();
+            return false;
+        }
+
+        private bool DisplayMovieInformation()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the title of a movie: ");
+            string movieTitle = Console.ReadLine();
+
+            IMovie movie = movies.Search(movieTitle);
+            if (movie != null)
+            {
+                string[] movieInfo = movie.ToString().Split(", ");
+                foreach (string info in movieInfo)
+                {
+                    Console.WriteLine(info);
+                }
+            }
+            EnterToGoBack();
+            return false;
+        }
+
+        private bool BorrowMovie(IMember member)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the title of a movie: ");
+            string movieTitle = Console.ReadLine();
+
+            IMovie movie = movies.Search(movieTitle);
+            if (movie != null)
+            {
+                movie.AddBorrower(member);
+                Console.WriteLine($"Borrowed a copy of '{movie.Title}' under the member '{member.LastName}, {member.FirstName}'.");
+            }
+            else
+            {
+                Console.WriteLine($"No movie titled '{movieTitle}' was found.");
+            }
+            EnterToGoBack();
+            return false;
         }
 
         private bool BrowseMovies()
         {
             Console.Clear();
-            IMovie[] mList = movies.ToArray();
-            for (int i = 0; i < mList.Length; i++)
+            IMovie[] movieList = movies.ToArray();
+            for (int i = 0; i < movieList.Length; i++)
             {
-                Console.WriteLine($"{i + 1}. {mList[i].ToString()}");
+                Console.WriteLine($"{i + 1}. {movieList[i].ToString()}");
             }
-            Console.WriteLine("\nPress enter to return to Member Menu: ");
-            Console.ReadLine();
+            EnterToGoBack();
             return false;
         }
 
-        // Verify if the user has correct the correct credential
+        // Verify if the member has correct credentials
         // Pre-condition: 
         // Post-condition: 
-        private bool VerifyUser(string userType)
+        private IMember VerifyMember()
         {
             Console.Clear();
             Console.WriteLine("Enter your name/username: ");
@@ -283,35 +436,33 @@ namespace cab301
             Console.WriteLine("\nEnter your password: ");
             string password = Console.ReadLine();
 
-            if (userType == "staff")
-            {
-                // Username and the password for the staff are ‘staff’ and ‘today123’, respectively
-                if (userName == "staff" && password == "today123")
-                {
-                    return true;
-                }
-                else return false;
-            } else
-            {
-                // Registered members are verified using their first name, last name and a password
-                string[] name = userName.Split('\u0020');
-                IMember tempMember = new Member(name[0], name[1]);
+            // Registered members are verified using their first name, last name and a password
+            string[] name = userName.Split('\u0020');
 
-                // Check if such a member exist
-                if (!members.Search(tempMember))
-                {
-                    return false;
-                }
-                else
-                {
-                    // If it does, check if the password entered is correct
-                    if (members.Find(tempMember).Pin == password)
-                    {
-                        return true;
-                    }
-                    else return false;
-                }
-            }
+            // Check if such a member exist
+            IMember member = members.Find(new Member(name[0], name[1]));
+
+            // If it does, check if the password entered is correct
+            return (member != null && member.Pin == password) ? member : null;
+        }
+
+        // Verify if the staff username and passwords are correct
+        private bool VerifyStaff()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter your name/username: ");
+            string userName = Console.ReadLine();
+            Console.WriteLine("\nEnter your password: ");
+            string password = Console.ReadLine();
+
+            // Username and the password for the staff are ‘staff’ and ‘today123’, respectively
+            return (userName == "staff" && password == "today123");
+        }
+
+        private void EnterToGoBack()
+        {
+            Console.WriteLine("\nPress enter to go back...");
+            Console.ReadLine();
         }
     }
 }
