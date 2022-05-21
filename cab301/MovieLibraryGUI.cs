@@ -43,8 +43,16 @@ namespace cab301
                     while (StaffMenu());
                     return true;
                 case 2:
-                    while (!VerifyUser("member")) ;
-                    while (MemberMenu());
+                    if (members.Number > 0)
+                    {
+                        while (!VerifyUser("member")) ;
+                        while (MemberMenu()) ;
+                    } else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("There is no register members in the system yet!");
+                        Console.ReadLine();
+                    }
                     return true;
                 case 0:
                     return false;
