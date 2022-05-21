@@ -226,6 +226,7 @@ namespace cab301
             {
                 case 1:
                     // Browse all the movies
+                    while(BrowseMovies());
                     return true;
                 case 2:
                     // Display all the information about a movie, given the title of the movie
@@ -250,6 +251,19 @@ namespace cab301
             }
         }
 
+        private bool BrowseMovies()
+        {
+            Console.Clear();
+            IMovie[] mList = movies.ToArray();
+            for (int i = 0; i < mList.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {mList[i].ToString()}");
+            }
+            Console.WriteLine("\nPress enter to return to Member Menu: ");
+            Console.ReadLine();
+            return false;
+        }
+
         // Verify if the user has correct the correct credential
         // Pre-condition: 
         // Post-condition: 
@@ -258,7 +272,7 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Enter your name/username: ");
             string userName = Console.ReadLine();
-            Console.WriteLine("Enter your password: ");
+            Console.WriteLine("\nEnter your password: ");
             string password = Console.ReadLine();
 
             if (userType == "staff")
@@ -279,7 +293,8 @@ namespace cab301
                 if (!members.Search(tempMember))
                 {
                     return false;
-                } else
+                }
+                else
                 {
                     // If it does, check if the password entered is correct
                     if (members.Find(tempMember).Pin == password)
