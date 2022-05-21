@@ -8,19 +8,24 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Johnny Yang\\.nuget\\packages\\": {}
+    "C:\\Users\\Hans\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\QUT\\CAB301\\cab301_ass3\\CAB301-CommunityMovieLibrary\\cab301\\cab301.csproj",
+      "projectUniqueName": "C:\\Users\\Hans\\Desktop\\SEM4\\CAB301 Algorithms and Complexity\\a3\\CAB301-CommunityMovieLibrary\\cab301\\cab301.csproj",
       "projectName": "cab301",
-      "projectPath": "E:\\QUT\\CAB301\\cab301_ass3\\CAB301-CommunityMovieLibrary\\cab301\\cab301.csproj",
-      "packagesPath": "C:\\Users\\Johnny Yang\\.nuget\\packages\\",
-      "outputPath": "E:\\QUT\\CAB301\\cab301_ass3\\CAB301-CommunityMovieLibrary\\cab301\\obj\\",
+      "projectPath": "C:\\Users\\Hans\\Desktop\\SEM4\\CAB301 Algorithms and Complexity\\a3\\CAB301-CommunityMovieLibrary\\cab301\\cab301.csproj",
+      "packagesPath": "C:\\Users\\Hans\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Hans\\Desktop\\SEM4\\CAB301 Algorithms and Complexity\\a3\\CAB301-CommunityMovieLibrary\\cab301\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Johnny Yang\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Hans\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

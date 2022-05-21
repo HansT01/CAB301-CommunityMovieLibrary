@@ -12,3 +12,17 @@ E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcorea
 E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.dll
 E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.pdb
 E:\QUT\CAB301\cab301_ass3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.genruntimeconfig.cache
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.csproj.AssemblyReference.cache
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.AssemblyInfoInputs.cache
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.AssemblyInfo.cs
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.csproj.CoreCompileInputs.cache
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.dll
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.pdb
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.exe
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.deps.json
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.runtimeconfig.json
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.runtimeconfig.dev.json
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.dll
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\bin\Debug\netcoreapp3.1\cab301.pdb
+C:\Users\Hans\Desktop\SEM4\CAB301 Algorithms and Complexity\a3\CAB301-CommunityMovieLibrary\cab301\obj\Debug\netcoreapp3.1\cab301.genruntimeconfig.cache
