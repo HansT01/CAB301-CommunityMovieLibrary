@@ -1,13 +1,17 @@
 ﻿using System;
 
-namespace cab301_a1
+namespace cab301
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // TestMovie();
-            TestMovieCollection();
+            /*// TestMovie();
+            TestMovieCollection();*/
+            bool showMenu = true;
+            
+            MovieLibraryGUI.MainMenu();
+            
         }
 
         private static void TestMovie()

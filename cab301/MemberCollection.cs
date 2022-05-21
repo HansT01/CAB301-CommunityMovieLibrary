@@ -151,6 +151,17 @@ public class MemberCollection : IMemberCollection
         return false;
     }
 
+    // Find a given member in this member collection 
+
+    // Pre-condition: nil
+
+    // Post-condition: return the reference of the member object in the member collection,
+    // if this member is in the member collection; return null otherwise; member collection remains unchanged
+    public IMember Find(IMember member)
+    {
+        return new Member("a", "b");
+    }
+
     // Remove all the members in this member collection
     // Pre-condition: nil
     // Post-condition: no member in this member collection 

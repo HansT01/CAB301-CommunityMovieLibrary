@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\cab301"
   ],
-  "SelectedNode": "\\cab301.sln",
+  "SelectedNode": "\\cab301\\MovieLibraryGUI.cs",
   "PreviewInSolutionExplorer": false
 }
