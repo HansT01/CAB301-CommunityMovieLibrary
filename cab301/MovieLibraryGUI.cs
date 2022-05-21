@@ -39,9 +39,11 @@ namespace cab301
             switch (input)
             {
                 case 1:
+                    while (!VerifyUser("staff"));
                     while (StaffMenu());
                     return true;
                 case 2:
+                    while (!VerifyUser("member")) ;
                     while (MemberMenu());
                     return true;
                 case 0:
@@ -53,10 +55,6 @@ namespace cab301
 
         private bool StaffMenu()
         {
-            if (!VerifyUser("staff"))
-            {
-                return false;
-            }
             Console.Clear();
             Console.WriteLine(string.Join(
                 Environment.NewLine,
@@ -207,10 +205,6 @@ namespace cab301
 
         private bool MemberMenu()
         {
-            if (!VerifyUser("member"))
-            {
-                return false;
-            }
             Console.Clear();
             Console.WriteLine(String.Join(
                 Environment.NewLine,
@@ -259,8 +253,9 @@ namespace cab301
         // Verify if the user has correct the correct credential
         // Pre-condition: 
         // Post-condition: 
-        public bool VerifyUser(string userType)
+        private bool VerifyUser(string userType)
         {
+            Console.Clear();
             Console.WriteLine("Enter your name/username: ");
             string userName = Console.ReadLine();
             Console.WriteLine("Enter your password: ");
