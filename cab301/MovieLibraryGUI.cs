@@ -6,7 +6,8 @@ namespace cab301
 {
     class MovieLibraryGUI
     {
-        MovieCollection collection;
+        MovieCollection movieCollection;
+        MemberCollection memberCollection;
 
         public MovieLibraryGUI()
         {
@@ -49,6 +50,10 @@ namespace cab301
 
         private bool StaffMenu()
         {
+            if (!VerifyUser("staff"))
+            {
+                return false;
+            }
             Console.Clear();
             Console.WriteLine(String.Join(
                 Environment.NewLine,
@@ -96,6 +101,10 @@ namespace cab301
 
         private bool MemberMenu()
         {
+            if (!VerifyUser("member"))
+            {
+                return false;
+            }
             Console.Clear();
             Console.WriteLine(String.Join(
                 Environment.NewLine,
@@ -141,19 +150,44 @@ namespace cab301
             }
         }
 
-        // Verify if the user has correct the correct user name and password
+        // Verify if the user has correct the correct credential
         // Pre-condition: 
         // Post-condition: 
         public bool VerifyUser(string userType)
         {
+            Console.WriteLine("Enter your name/username: ");
+            string userName = Console.ReadLine();
+            Console.WriteLine("Enter your password: ");
+            string password = Console.ReadLine();
+
             if (userType == "staff")
             {
-                // username and the password for the staff are ‘staff’ and ‘today123’, respectively
+                // Username and the password for the staff are ‘staff’ and ‘today123’, respectively
+                if (userName == "staff" && password == "today123")
+                {
+                    return true;
+                }
+                else return false;
             } else
             {
                 // Registered members are verified using their first name, last name and a password
+                string[] name = userName.Split('\u0020');
+                IMember tempMember = new Member(name[0], name[1]);
+
+                // Check if such a member exist
+                if (!memberCollection.Search(tempMember))
+                {
+                    return false;
+                } else
+                {
+                    // If it does, check if the password entered is correct
+                    if (memberCollection.Find(tempMember).Pin == password)
+                    {
+                        return true;
+                    }
+                    else return false;
+                }
             }
-            return true;
         }
     }
 }

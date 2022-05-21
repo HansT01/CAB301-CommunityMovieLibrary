@@ -159,7 +159,32 @@ public class MemberCollection : IMemberCollection
     // if this member is in the member collection; return null otherwise; member collection remains unchanged
     public IMember Find(IMember member)
     {
-        return new Member("a", "b");
+        if (member == null)
+        {
+            return null;
+        }
+
+        int l = 0;
+        int r = count - 1;
+        while (l <= r)
+        {
+            int m = (l + r) / 2;
+            int comparison = member.CompareTo(members[m]);
+            if (comparison == 0)
+            {
+                return members[m];
+            }
+            else if (comparison == 1)
+            {
+                l = m + 1;
+            }
+            else
+            {
+                r = m - 1;
+            }
+        }
+
+        return null;
     }
 
     // Remove all the members in this member collection
