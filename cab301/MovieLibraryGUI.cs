@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,18 +7,20 @@ namespace cab301
 {
     class MovieLibraryGUI
     {
-        MovieCollection movieCollection;
-        MemberCollection memberCollection;
+        MovieCollection movies;
+        MemberCollection members;
 
         public MovieLibraryGUI()
         {
+            this.movies = new MovieCollection();
+            this.members = new MemberCollection(1000);
             while (MainMenu());
         }
 
         private bool MainMenu()
         {
             Console.Clear();
-            Console.WriteLine(String.Join(
+            Console.WriteLine(string.Join(
                 Environment.NewLine,
                 "============================================================",
                 "Welcome to Community Library Movie DVD Management System",
@@ -55,7 +58,7 @@ namespace cab301
                 return false;
             }
             Console.Clear();
-            Console.WriteLine(String.Join(
+            Console.WriteLine(string.Join(
                 Environment.NewLine,
                 "========================Staff Menu==========================",
                 " ",
@@ -75,6 +78,7 @@ namespace cab301
             {
                 case 1:
                     // Add new DVDs of a new movie to the system
+                    while (AddMovie());
                     return true;
                 case 2:
                     // Remove DVDs of a movie from the system
@@ -96,6 +100,108 @@ namespace cab301
                     return false;
                 default:
                     return true;
+            }
+        }
+
+        private bool AddMovie()
+        {
+            object SelectEnum(Type enumType)
+            {
+                string[] enums = Enum.GetNames(enumType);
+                int[] indexRange = new int[enums.Length];
+                for (int i = 0; i < enums.Length; i++)
+                {
+                    indexRange[i] = i + 1;
+                    Console.WriteLine($"{i + 1}. {enums[i]}");
+                }
+                Console.WriteLine($"\nEnter your choice ==> ({string.Join("/", indexRange)})");
+                try
+                {
+                    return Enum.Parse(enumType, enums[int.Parse(Console.ReadLine()) - 1]);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            Console.Clear();
+            Console.WriteLine("Movie title: ");
+            string title = Console.ReadLine();
+
+            object genre = null;
+            while (genre == null)
+            {
+                Console.Clear();
+                Console.WriteLine("Select a genre: ");
+                genre = SelectEnum(typeof(MovieGenre));
+            }
+
+            object classification = null;
+            while (classification == null)
+            {
+                Console.Clear();
+                Console.WriteLine("Select a classification: ");
+                classification = SelectEnum(typeof(MovieClassification));
+            }
+
+            int duration = 0;
+            while (duration <= 0)
+            {
+                Console.Clear();
+                Console.WriteLine("Movie duration: ");
+                try
+                {
+                    duration = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            int copies = 0;
+            while (copies <= 0)
+            {
+                Console.Clear();
+                Console.WriteLine("Total copies: ");
+                try
+                {
+                    copies = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            Movie movie = new Movie(title, (MovieGenre) genre, (MovieClassification) classification, duration, copies);
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(string.Join(
+                    Environment.NewLine,
+                    "Would you like to add the new movie:",
+                    $"{movie.ToString()}",
+                    " ",
+                    "1. Add movie and exit menu",
+                    "2. Redo input fields without adding movie",
+                    "0. Exit without adding movie",
+                    " ",
+                    "Enter your choice ==> (1/2/0)"
+                ));
+                int input = int.Parse(Console.ReadLine());
+                switch (input) {
+                    case 1:
+                        movies.Insert(movie);
+                        return false;
+                    case 2:
+                        return true;
+                    case 0:
+                        return false;
+                    default:
+                        continue;
+                }
             }
         }
 
@@ -175,13 +281,13 @@ namespace cab301
                 IMember tempMember = new Member(name[0], name[1]);
 
                 // Check if such a member exist
-                if (!memberCollection.Search(tempMember))
+                if (!members.Search(tempMember))
                 {
                     return false;
                 } else
                 {
                     // If it does, check if the password entered is correct
-                    if (memberCollection.Find(tempMember).Pin == password)
+                    if (members.Find(tempMember).Pin == password)
                     {
                         return true;
                     }
