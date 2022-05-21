@@ -128,13 +128,7 @@ namespace cab301
             object SelectEnum(Type enumType)
             {
                 string[] enums = Enum.GetNames(enumType);
-                int[] indexRange = new int[enums.Length];
-                for (int i = 0; i < enums.Length; i++)
-                {
-                    indexRange[i] = i + 1;
-                    Console.WriteLine($"{i + 1}. {enums[i]}");
-                }
-                Console.WriteLine($"\nEnter your choice ==> ({string.Join("/", indexRange)})");
+                OptionSelect(enums);
                 try
                 {
                     return Enum.Parse(enumType, enums[int.Parse(Console.ReadLine()) - 1]);
@@ -202,7 +196,8 @@ namespace cab301
                 Console.WriteLine(string.Join(
                     Environment.NewLine,
                     "Would you like to add the new movie:",
-                    $"{movie.ToString()}",
+                    " ",
+                    $"{String.Join("\n", movie.ToString().Split(", "))}",
                     " "
                 ));
                 OptionSelect(new string[] {
@@ -211,9 +206,19 @@ namespace cab301
                 }, "Exit without adding movie");
                 switch (int.Parse(Console.ReadLine())) {
                     case 1:
-                        movies.Insert(movie);
+                        // Add movie and exit menu
+                        if (movies.Insert(movie))
+                        {
+                            Console.WriteLine($"{copies} copies of '{movie.Title}' has been added to the collection");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to add '{movie.Title}' to the collection");
+                        };
+                        EnterToGoBack();
                         return false;
                     case 2:
+                        // Redo input fields without adding movie
                         return true;
                     case 0:
                         return false;
