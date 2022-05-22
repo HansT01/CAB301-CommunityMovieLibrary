@@ -221,6 +221,7 @@ namespace cab301
                         // Redo input fields without adding movie
                         return true;
                     case 0:
+                        // Exit without adding movie
                         return false;
                     default:
                         continue;
