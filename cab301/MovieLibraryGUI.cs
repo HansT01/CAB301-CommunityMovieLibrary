@@ -306,18 +306,6 @@ namespace cab301
             }
         }
 
-        // IComparer class that allows for comparing duplicate keys
-        // https://stackoverflow.com/questions/5716423/c-sharp-sortable-collection-which-allows-duplicate-keys
-        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable
-        {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                if (result == 0) return 1;
-                return result;
-            }
-        }
-
         // Renders the top k movies by number of borrowings
         private bool ListTopMovies(int k)
         {
@@ -359,7 +347,7 @@ namespace cab301
         private bool ListBorrowingMovies(IMember member)
         {
             Console.Clear();
-            Console.WriteLine("Movies the current users is currently borrowing: ");
+            Console.WriteLine("Movies the current users is currently borrowing: \n");
 
             // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
             IMovie[] movieList = movies.ToArray();
@@ -390,6 +378,7 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Enter the title of the movie you would like to return: ");
             string movieTitle = Console.ReadLine();
+            Console.WriteLine();
 
             IMovie movie = movies.Search(movieTitle);
             if (movie != null)
@@ -416,6 +405,7 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Enter the title of a movie: ");
             string movieTitle = Console.ReadLine();
+            Console.WriteLine();
 
             IMovie movie = movies.Search(movieTitle);
             if (movie != null)
@@ -435,6 +425,7 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Enter the title of a movie: ");
             string movieTitle = Console.ReadLine();
+            Console.WriteLine();
 
             IMovie movie = movies.Search(movieTitle);
             if (movie != null)
