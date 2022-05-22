@@ -43,16 +43,16 @@ namespace cab301
                 "========================Main Menu==========================="
             ));
             OptionSelect(new string[] { "Staff Login", "Member Login" }, "Exit");
-            switch (Convert.ToInt32(Console.ReadLine()))
+            switch (Console.ReadLine())
             {
-                case 1:
+                case "1":
                     // Staff login
                     if (VerifyStaff())
                     {
                         while (StaffMenu()) ;
                     }
                     return true;
-                case 2:
+                case "2":
                     // Member login
                     if (members.Number <= 0)
                     {
@@ -67,7 +67,7 @@ namespace cab301
                         while (MemberMenu(member)) ;
                     }
                     return true;
-                case 0:
+                case "0":
                     // Exit
                     return false;
                 default:
@@ -88,33 +88,33 @@ namespace cab301
                 "Display a member's contact phone number, given the member's name",
                 "Display all members who are currently renting a particular movie"
             }, "Return to the main menu");
-            switch (Convert.ToInt32(Console.ReadLine()))
+            switch (Console.ReadLine())
             {
-                case 1:
+                case "1":
                     // Add new DVDs of a new movie to the system
                     while (AddMovie());
                     return true;
-                case 2:
+                case "2":
                     // Remove DVDs of a movie from the system
                     while (DeleteMovie());
                     return true;
-                case 3:
+                case "3":
                     // Register a new member with the system
                     while (RegisterMember());
                     return true;
-                case 4:
+                case "4":
                     // Remove a resitered member from the system
                     while (RemoveMember());
                     return true;
-                case 5:
+                case "5":
                     // Display a member's contact phone number, given the member's name
                     while (DisplayMemberPhoneNo());
                     return true;
-                case 6:
+                case "6":
                     // Display all members who are currently renting a particular movie
                     while (DisplayBorrowers());
                     return true;
-                case 0:
+                case "0":
                     // Return to the main menu
                     return false;
                 default:
@@ -248,8 +248,8 @@ namespace cab301
                     "Add movie and exit menu",
                     "Redo input fields without adding movie"
                 }, "Exit without adding movie");
-                switch (int.Parse(Console.ReadLine())) {
-                    case 1:
+                switch (Console.ReadLine()) {
+                    case "1":
                         // Add movie and exit menu
                         if (movies.Insert(movie))
                         {
@@ -261,10 +261,10 @@ namespace cab301
                         };
                         EnterToGoBack();
                         return false;
-                    case 2:
+                    case "2":
                         // Redo input fields without adding movie
                         return true;
-                    case 0:
+                    case "0":
                         // Exit without adding movie
                         return false;
                     default:
@@ -359,9 +359,9 @@ namespace cab301
                         "Register member and exit menu",
                         "Redo input fields without registering member"
                     }, "Exit without registering member");
-                    switch (int.Parse(Console.ReadLine()))
+                    switch (Console.ReadLine())
                     {
-                        case 1:
+                        case "1":
                             // Register member and exit menu
                             if (!members.Search(member))
                             {
@@ -374,10 +374,10 @@ namespace cab301
                             }
                             EnterToGoBack();
                             return false;
-                        case 2:
+                        case "2":
                             // Redo input fields without registering member
                             return true;
-                        case 0:
+                        case "0":
                             // Exit without registering member
                             return false;
                         default:
@@ -458,33 +458,33 @@ namespace cab301
                 "List current borrowing movies",
                 "Display the top 3 movies rented by the members",
             }, "Return to the main menu");
-            switch (Convert.ToInt32(Console.ReadLine()))
+            switch (Console.ReadLine())
             {
-                case 1:
+                case "1":
                     // Browse all the movies
                     while (BrowseMovies()) ;
                     return true;
-                case 2:
+                case "2":
                     // Display all the information about a movie, given the title of the movie
                     while (DisplayMovieInformation()) ;
                     return true;
-                case 3:
+                case "3":
                     // Borrow a movie DVD
                     while (BorrowMovie(member)) ;
                     return true;
-                case 4:
+                case "4":
                     // Return a movie DVD
                     while (ReturnMovie(member)) ;
                     return true;
-                case 5:
+                case "5":
                     // List current borrowing movies
                     while (ListBorrowingMovies(member)) ;
                     return true;
-                case 6:
+                case "6":
                     // Display the top 3 movies rented by the members
                     while (ListTopMovies(3)) ;
                     return true;
-                case 0:
+                case "0":
                     // Return to the main menu
                     return false;
                 default:
