@@ -112,5 +112,34 @@ public class Movie : IMovie
     {
         return $"Title: {Title}, Genre: {Genre}, Classification: {Classification}, Duration: {Duration}, Available copies: {AvailableCopies}";
     }
+
+    // Adds a positive n number of copies of a movie.
+    // Pre-condition: nil
+    // Post-condition: A boolean value based on whether the operation was successful.
+    public bool AddCopies(int n)
+    {
+        if (n <= 0)
+        {
+            return false;
+        }
+        AvailableCopies += n;
+        TotalCopies += n;
+        return true;
+    }
+
+    // Removes a positive n number of copies of a movie. Operation will fail
+    // if there is not enough available copies to remove from the movie.
+    // Pre-condition: nil
+    // Post-condition: A boolean value based on whether the operation was successful.
+    public bool RemoveCopies(int n)
+    {
+        if (n <= 0 || AvailableCopies < n)
+        {
+            return false;
+        }
+        AvailableCopies -= n;
+        TotalCopies -= n;
+        return true;
+    }
 }
 

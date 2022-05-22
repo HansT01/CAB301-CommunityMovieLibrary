@@ -19,6 +19,7 @@ namespace cab301
 
         private void OptionSelect(string[] options, string option0 = null)
         {
+            Console.WriteLine();
             int[] indexRange = new int[options.Length];
             for (int i = 0; i < options.Length; i++)
             {
@@ -39,8 +40,7 @@ namespace cab301
                 "Welcome to Community Library Movie DVD Management System",
                 "============================================================",
                 " ",
-                "========================Main Menu===========================",
-                " "
+                "========================Main Menu==========================="
             ));
             OptionSelect(new string[] { "Staff Login", "Member Login" }, "Exit");
             switch (Convert.ToInt32(Console.ReadLine()))
@@ -79,16 +79,12 @@ namespace cab301
         private bool StaffMenu()
         {
             Console.Clear();
-            Console.WriteLine(string.Join(
-                Environment.NewLine,
-                "========================Staff Menu==========================",
-                " "
-            ));
+            Console.WriteLine("========================Staff Menu==========================");
             OptionSelect(new string[] {
                 "Add new DVDs of a new movie to the system",
                 "Remove DVDs of a movie from the system",
                 "Register a new member with the system",
-                "Remove a resitered member from the system",
+                "Remove a registered member from the system",
                 "Display a member's contact phone number, given the member's name",
                 "Display all members who are currently renting a particular movie"
             }, "Return to the main menu");
@@ -126,8 +122,7 @@ namespace cab301
             }
         }
 
-        // TODO if movie already exist, this method should just increase available copies
-        // instead of adding a new movie instance
+        // TODO code might need some cleaning up - will look into it later
         private bool AddMovie()
         {
             object SelectEnum(Type enumType)
@@ -147,6 +142,51 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Movie title: ");
             string title = Console.ReadLine();
+
+            Movie movie = (Movie) movies.Search(title);
+            if (movie != null)
+            {
+                Console.Clear();
+                Console.WriteLine($"Movie with the title '{title}' already exists in the collection.");
+                OptionSelect(new string[]
+                {
+                    "Add new copies of the movie",
+                    "Enter a different movie title",
+                }, "Return to staff menu");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        // Add copies of the movie
+                        Console.Clear();
+                        Console.WriteLine("Enter in the number of copies to add: ");
+                        try
+                        {
+                            int c = int.Parse(Console.ReadLine());
+                            if (movie.AddCopies(c))
+                            {
+                                Console.WriteLine($"{c} copies of '{movie.Title}' has been successfully added");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please enter a positive integer");
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Please enter a positive integer");
+                        }
+                        EnterToGoBack();
+                        return false;
+                    case "2":
+                        // Enter a different movie title
+                        return true;
+                    case "0":
+                        // Return to staff menu
+                        return false;
+                    default:
+                        return true;
+                }
+            }
 
             object genre = null;
             while (genre == null)
@@ -194,7 +234,7 @@ namespace cab301
                 }
             }
 
-            Movie movie = new Movie(title, (MovieGenre) genre, (MovieClassification) classification, duration, copies);
+            movie = new Movie(title, (MovieGenre) genre, (MovieClassification) classification, duration, copies);
             while (true)
             {
                 Console.Clear();
@@ -202,8 +242,7 @@ namespace cab301
                     Environment.NewLine,
                     "Would you like to add the new movie:",
                     " ",
-                    $"{String.Join("\n", movie.ToString().Split(", "))}",
-                    " "
+                    $"{String.Join("\n", movie.ToString().Split(", "))}"
                 ));
                 OptionSelect(new string[] {
                     "Add movie and exit menu",
@@ -214,11 +253,11 @@ namespace cab301
                         // Add movie and exit menu
                         if (movies.Insert(movie))
                         {
-                            Console.WriteLine($"{copies} copies of '{movie.Title}' has been added to the collection");
+                            Console.WriteLine($"\n{copies} copies of '{movie.Title}' has been added to the collection");
                         }
                         else
                         {
-                            Console.WriteLine($"Failed to add '{movie.Title}' to the collection");
+                            Console.WriteLine($"\nFailed to add '{movie.Title}' to the collection");
                         };
                         EnterToGoBack();
                         return false;
@@ -234,21 +273,46 @@ namespace cab301
             }
         }
 
+        // TODO code might need some cleaning up - will look into it later
         private bool DeleteMovie()
         {
             Console.Clear();
             Console.WriteLine("Enter the title: ");
-            IMovie movie = movies.Search(Console.ReadLine());
+
+            string title = Console.ReadLine();
+            Movie movie = (Movie) movies.Search(title);
 
             if (movie != null)
             {
-                movies.Delete(movie);
-                Console.WriteLine($"'{movie.Title}' has been removed.");
-            } else
-            {
-                Console.WriteLine("There is no such movie in the library.");
+                Console.WriteLine("\n" + String.Join("\n", movie.ToString().Split(", ")));  
+                Console.WriteLine($"\nEnter the number of copies to remove from the movie: ");
+                try
+                {
+                    int c = int.Parse(Console.ReadLine());
+                    if (movie.RemoveCopies(c))
+                    {
+                        Console.WriteLine($"\nSuccessfully removed {c} copies from '{movie.Title}'");
+                        if (movie.TotalCopies == 0)
+                        {
+                            movies.Delete(movie);
+                            Console.WriteLine($"'{movie.Title}' has been removed from the library.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\nUnable to remove {c} copies from '{movie.Title}'");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("\nPlease enter a positive integer");
+                }
             }
-            
+            else
+            {
+                Console.WriteLine($"\nThere is no movie with the title '{title}' in the library.");
+            }
+
             EnterToGoBack();
             return false;
         }
@@ -289,20 +353,25 @@ namespace cab301
                         Environment.NewLine,
                         "Would you like to add the new member:",
                         " ",
-                        $"{member.FirstName}, {member.LastName}, {member.ContactNumber}, {member.Pin}",
-                        " "
+                        $"{member.FirstName}, {member.LastName}, {member.ContactNumber}, {member.Pin}"
                     ));
                     OptionSelect(new string[] {
-                    "Register member and exit menu",
-                    "Redo input fields without registering member"
-                }, "Exit without registering member");
+                        "Register member and exit menu",
+                        "Redo input fields without registering member"
+                    }, "Exit without registering member");
                     switch (int.Parse(Console.ReadLine()))
                     {
                         case 1:
                             // Register member and exit menu
-                            Console.Clear();
-                            members.Add(member);
-                            Console.WriteLine($"{firstName}, {lastName} has been registered as a new member.");
+                            if (!members.Search(member))
+                            {
+                                members.Add(member);
+                                Console.WriteLine($"\n '{firstName}, {lastName}' has been registered as a new member.");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"\n '{firstName}, {lastName}' is already registered.");
+                            }
                             EnterToGoBack();
                             return false;
                         case 2:
@@ -350,7 +419,7 @@ namespace cab301
             if (SearchMember(name))
             {
                 IMember member = members.Find(new Member(name[0], name[1]));
-                Console.WriteLine($"The member's phone number is: '{member.ContactNumber}'");
+                Console.WriteLine($"\nThe member's phone number is: '{member.ContactNumber}'");
             }
             
             EnterToGoBack();
@@ -363,32 +432,24 @@ namespace cab301
             Console.WriteLine("Enter the title of the movie you want to view: ");
             string title = Console.ReadLine();
 
-            if (movies.Search(title) != null)
+            IMovie movie = movies.Search(title);
+            if (movie != null)
             {
-                Console.Clear();
-                Console.WriteLine(String.Join(
-                    Environment.NewLine,
-                    movies.Search(title).ToString(),
-                    "is borrowed by: "
-                ));
+                Console.WriteLine("\n" + String.Join("\n", movies.Search(title).ToString().Split(", ")));
+                Console.WriteLine($"\nThis movie is currently being borrowed by {movie.Borrowers.Number} members: ");
                 Console.WriteLine(movies.Search(title).Borrowers.ToString());
             }
-
-            Console.Clear();
-            Console.WriteLine("There is no such movie in the collection.");
-
+            else
+            {
+                Console.WriteLine("\nThere is no such movie in the collection.");
+            }
             EnterToGoBack();
             return false;
         }
         private bool MemberMenu(IMember member)
         {
             Console.Clear();
-            Console.WriteLine(String.Join(
-                Environment.NewLine,
-                "======================Member Menu==========================",
-                " "
-            ));
-
+            Console.WriteLine("======================Member Menu==========================");
             OptionSelect(new string[] {
                 "Browse all the movies",
                 "Display all the information about a movie, given the title of the movie",
@@ -584,19 +645,20 @@ namespace cab301
         // Post-condition: 
         private IMember VerifyMember()
         {
+            // Registered members are verified using their first name, last name and a password
             Console.Clear();
-            Console.WriteLine("Enter your name: ");
-            string userName = Console.ReadLine();
+            Console.WriteLine("Enter your first name: ");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("\nEnter your last name: ");
+            string lastName = Console.ReadLine();
             Console.WriteLine("\nEnter your password: ");
             string password = Console.ReadLine();
 
-            // Registered members are verified using their first name, last name and a password
-            string[] name = userName.Split('\u0020');
-
             // Check if such a member exist
-            IMember member = members.Find(new Member(name[0], name[1]));
+            IMember member = members.Find(new Member(firstName, lastName));
 
             // If it does, check if the password entered is correct
+            // Scuffed security
             return (member != null && member.Pin == password) ? member : null;
         }
 
