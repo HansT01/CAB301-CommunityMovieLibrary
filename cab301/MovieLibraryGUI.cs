@@ -324,30 +324,27 @@ namespace cab301
             Console.Clear();
             Console.WriteLine($"Top {k} movies rented by members: ");
 
-            // ToArray() method has a time complexity of O(n)
+            // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
             IMovie[] movieList = movies.ToArray();
 
-            // SortedList insert method is O(nlog(m)), where m is the number of elements in the list
-            // Since m is always less than k, this method has a time complexity of O(n)
-            SortedList<int, IMovie> sortedList = new SortedList<int, IMovie>(new DuplicateKeyComparer<int>());
+            // This implementation of a PriorityQueue is a min-heap.
+            // PriorityQueue insert method is O(nlog(m)), where m is the number of elements in the queue.
+            // Since m can't be higher than k, the worst-case time complexity is O(nlog(k)) for the top k elements.
+            PriorityQueue<IMovie, int> queue = new();
             for (int i = 0; i < movieList.Length; i++)
             {
-                sortedList.Add(movieList[i].NoBorrowings, movieList[i]);
-                if (sortedList.Count > k)
+                queue.Enqueue(movieList[i], movieList[i].NoBorrowings);
+                if (queue.Count > k)
                 {
-                    // Remove the movie with the least borrowers
-                    // Voodoo magic
-                    sortedList.RemoveAt(0);
+                    queue.Dequeue();
                 }
             }
 
             // Get the top movies in descending order by borrower count
-            IMovie[] topMovies = new IMovie[k];
-            int iterator = k - 1;
-            foreach (KeyValuePair<int, IMovie> pair in sortedList)
+            IMovie[] topMovies = new IMovie[queue.Count];
+            for (int i = queue.Count - 1; i >= 0; i--)
             {
-                topMovies[iterator] = pair.Value;
-                iterator--;
+                topMovies[i] = queue.Dequeue();
             }
 
             for (int i = 0; i < topMovies.Length; i++)
@@ -364,13 +361,10 @@ namespace cab301
             Console.Clear();
             Console.WriteLine("Movies the current users is currently borrowing: ");
 
-            // ToArray() method has a time complexity of O(n)
+            // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
             IMovie[] movieList = movies.ToArray();
 
-            // Looping through the list of movies and searching for a member has a time complexity of O(nlog(m))
-            // Where m is the number borrowers of a movie
-            // This could easily be O(1) if borrowed movies were stored in the Member object
-            // Or even O(n) if Members were stored in a hash map.
+            // Looping through the list of movies and searching for a member has a time complexity of O(nlog(m)).
             IMovie[] borrowedMovies = new IMovie[movieList.Length];
             int count = 0;
             for (int i = 0; i < movieList.Length; i++)
