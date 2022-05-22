@@ -112,6 +112,7 @@ namespace cab301
                     return true;
                 case 6:
                     // Display all members who are currently renting a particular movie
+                    while (DisplayBorrowers());
                     return true;
                 case 0:
                     // Return to the main menu
@@ -229,6 +230,30 @@ namespace cab301
             }
         }
 
+        private bool DisplayBorrowers()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the title of the movie you want to view: ");
+            string title = Console.ReadLine();
+
+            if (movies.Search(title) == null)
+            {
+                Console.Clear();
+                Console.WriteLine("There is no such movie in the collection.");
+            } else
+            {
+                Console.Clear();
+                Console.WriteLine(String.Join(
+                    Environment.NewLine, 
+                    movies.Search(title).ToString(), 
+                    "is borrowed by: "
+                ));
+                Console.WriteLine(movies.Search(title).Borrowers.ToString());
+            }
+
+            EnterToGoBack();
+            return false;
+        }
         private bool MemberMenu(IMember member)
         {
             Console.Clear();
