@@ -100,6 +100,7 @@ namespace cab301
                     return true;
                 case 2:
                     // Remove DVDs of a movie from the system
+                    while (DeleteMovie());
                     return true;
                 case 3:
                     // Register a new member with the system
@@ -233,6 +234,25 @@ namespace cab301
             }
         }
 
+        private bool DeleteMovie()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the title: ");
+            IMovie movie = movies.Search(Console.ReadLine());
+
+            if (movie != null)
+            {
+                movies.Delete(movie);
+                Console.WriteLine($"'{movie.Title}' has been removed.");
+            } else
+            {
+                Console.WriteLine("There is no such movie in the library.");
+            }
+            
+            EnterToGoBack();
+            return false;
+        }
+
         private bool RegisterMember()
         {
             Console.Clear();
@@ -296,7 +316,6 @@ namespace cab301
                     }
                 }
             } 
-            
 
             return false;
         }
@@ -308,14 +327,14 @@ namespace cab301
             string userName = Console.ReadLine();
 
             string[] name = userName.Split('\u0020');
-            IMember member = members.Find(new Member(name[0], name[1]));
 
-            if (member != null)
+            if (SearchMember(name))
             {
+                IMember member = members.Find(new Member(name[0], name[1]));
                 members.Delete(member);
+                Console.WriteLine($"Member {member.LastName}, {member.FirstName} has been removed.");
             }
-
-            Console.WriteLine($"Member , '{member.LastName}, {member.FirstName}' is removed.");
+            
             EnterToGoBack();
             return false;
         }
@@ -326,11 +345,11 @@ namespace cab301
             Console.WriteLine("Enter the member's name: ");
             string userName = Console.ReadLine();
 
-            string[] name = userName.Split('\u0020');
-            IMember member = members.Find(new Member(name[0], name[1]));
+            string[] name = userName.Split('\u0020');   
 
-            if (member != null)
+            if (SearchMember(name))
             {
+                IMember member = members.Find(new Member(name[0], name[1]));
                 Console.WriteLine($"The member's phone number is: '{member.ContactNumber}'");
             }
             
@@ -598,6 +617,16 @@ namespace cab301
         {
             Console.WriteLine("\nPress enter to go back...");
             Console.ReadLine();
+        }
+
+        private bool SearchMember(string[] name)
+        {
+            if (!members.Search(new Member(name[0], name[1])))
+            {
+                Console.WriteLine("There is no such member.");
+                return false;
+            }
+            return true;
         }
     }
 }
