@@ -89,7 +89,7 @@ namespace cab301
                 "Remove DVDs of a movie from the system",
                 "Register a new member with the system",
                 "Remove a resitered member from the system",
-                "Remove a resitered member from the system",
+                "Display a member's contact phone number, given the member's name",
                 "Display all members who are currently renting a particular movie"
             }, "Return to the main menu");
             switch (Convert.ToInt32(Console.ReadLine()))
@@ -103,12 +103,15 @@ namespace cab301
                     return true;
                 case 3:
                     // Register a new member with the system
+                    while (RegisterMember());
                     return true;
                 case 4:
                     // Remove a resitered member from the system
+                    while (RemoveMember());
                     return true;
                 case 5:
-                    // Remove a resitered member from the system
+                    // Display a member's contact phone number, given the member's name
+                    while (DisplayMemberPhoneNo());
                     return true;
                 case 6:
                     // Display all members who are currently renting a particular movie
@@ -230,26 +233,130 @@ namespace cab301
             }
         }
 
+        private bool RegisterMember()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the member's first name: ");
+            string firstName = Console.ReadLine();
+
+            Console.Clear();
+            Console.WriteLine("Enter the member's last name: ");
+            string lastName = Console.ReadLine();
+
+            if (!members.Search(new Member(firstName, lastName)))
+            {
+                string contactNumber = null;
+                while (!IMember.IsValidContactNumber(contactNumber))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Enter the contact number: ");
+                    contactNumber = Console.ReadLine();
+                }
+
+                string pin = null;
+                while (!IMember.IsValidPin(pin))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Enter the pin: ");
+                    pin = Console.ReadLine();
+                }
+
+                Member member = new(firstName, lastName, contactNumber, pin);
+                while (true)
+                {
+                    Console.Clear();
+                    Console.WriteLine(string.Join(
+                        Environment.NewLine,
+                        "Would you like to add the new member:",
+                        " ",
+                        $"{member.FirstName}, {member.LastName}, {member.ContactNumber}, {member.Pin}",
+                        " "
+                    ));
+                    OptionSelect(new string[] {
+                    "Register member and exit menu",
+                    "Redo input fields without registering member"
+                }, "Exit without registering member");
+                    switch (int.Parse(Console.ReadLine()))
+                    {
+                        case 1:
+                            // Register member and exit menu
+                            Console.Clear();
+                            members.Add(member);
+                            Console.WriteLine($"{firstName}, {lastName} has been registered as a new member.");
+                            EnterToGoBack();
+                            return false;
+                        case 2:
+                            // Redo input fields without registering member
+                            return true;
+                        case 0:
+                            // Exit without registering member
+                            return false;
+                        default:
+                            continue;
+                    }
+                }
+            } 
+            
+
+            return false;
+        }
+
+        private bool RemoveMember()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the name of the member to be removed: ");
+            string userName = Console.ReadLine();
+
+            string[] name = userName.Split('\u0020');
+            IMember member = members.Find(new Member(name[0], name[1]));
+
+            if (member != null)
+            {
+                members.Delete(member);
+            }
+
+            Console.WriteLine($"Member , '{member.LastName}, {member.FirstName}' is removed.");
+            EnterToGoBack();
+            return false;
+        }
+
+        private bool DisplayMemberPhoneNo()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the member's name: ");
+            string userName = Console.ReadLine();
+
+            string[] name = userName.Split('\u0020');
+            IMember member = members.Find(new Member(name[0], name[1]));
+
+            if (member != null)
+            {
+                Console.WriteLine($"The member's phone number is: '{member.ContactNumber}'");
+            }
+            
+            EnterToGoBack();
+            return false;
+        }
+
         private bool DisplayBorrowers()
         {
             Console.Clear();
             Console.WriteLine("Enter the title of the movie you want to view: ");
             string title = Console.ReadLine();
 
-            if (movies.Search(title) == null)
-            {
-                Console.Clear();
-                Console.WriteLine("There is no such movie in the collection.");
-            } else
+            if (movies.Search(title) != null)
             {
                 Console.Clear();
                 Console.WriteLine(String.Join(
-                    Environment.NewLine, 
-                    movies.Search(title).ToString(), 
+                    Environment.NewLine,
+                    movies.Search(title).ToString(),
                     "is borrowed by: "
                 ));
                 Console.WriteLine(movies.Search(title).Borrowers.ToString());
             }
+
+            Console.Clear();
+            Console.WriteLine("There is no such movie in the collection.");
 
             EnterToGoBack();
             return false;
@@ -474,7 +581,7 @@ namespace cab301
         private IMember VerifyMember()
         {
             Console.Clear();
-            Console.WriteLine("Enter your name/username: ");
+            Console.WriteLine("Enter your name: ");
             string userName = Console.ReadLine();
             Console.WriteLine("\nEnter your password: ");
             string password = Console.ReadLine();
