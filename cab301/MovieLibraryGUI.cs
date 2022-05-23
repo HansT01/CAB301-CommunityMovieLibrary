@@ -535,8 +535,13 @@ namespace cab301
         {
             Console.Clear();
             Console.WriteLine("Movies the current users is currently borrowing: \n");
+            List<IMovie> borrowedMovies = ((Member)member).BorrowedMovies;
 
-            // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
+            foreach (IMovie movie in borrowedMovies) {
+                Console.WriteLine(movie.ToString());
+            }
+
+            /*// ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
             IMovie[] movieList = movies.ToArray();
 
             // Looping through the list of movies and searching for a member has a time complexity of O(nlog(m)).
@@ -554,7 +559,7 @@ namespace cab301
             for (int i = 0; i < count; i++)
             {
                 Console.WriteLine(borrowedMovies[i].ToString());
-            }
+            }*/
 
             EnterToGoBack();
             return false;
@@ -610,20 +615,31 @@ namespace cab301
         private bool BorrowMovie(IMember member)
         {
             Console.Clear();
-            Console.WriteLine("Enter the title of a movie: ");
-            string movieTitle = Console.ReadLine();
-            Console.WriteLine();
+            List<IMovie> borrowedMovies = ((Member)member).BorrowedMovies;
+            Console.WriteLine(borrowedMovies.Count);
 
-            IMovie movie = movies.Search(movieTitle);
-            if (movie != null)
+            if (borrowedMovies.Count < 5)
             {
-                movie.AddBorrower(member);
-                Console.WriteLine($"Borrowed a copy of '{movie.Title}' under the member '{member.LastName}, {member.FirstName}'.");
-            }
-            else
+                Console.WriteLine("Enter the title of a movie: ");
+                string movieTitle = Console.ReadLine();
+                IMovie movie = movies.Search(movieTitle);
+                if (movie != null)
+                {
+                    movie.AddBorrower(member);
+                    borrowedMovies.Add(movie);
+                    Console.WriteLine($"Borrowed a copy of '{movie.Title}' under the member '{member.LastName}, {member.FirstName}'.");
+                }
+                else
+                {
+
+                    Console.WriteLine($"No movie titled '{movieTitle}' was found.");
+                }
+            } else
             {
-                Console.WriteLine($"No movie titled '{movieTitle}' was found.");
+                Console.WriteLine("You cannot borrow more than 5 DVDS.");
             }
+
+            
             EnterToGoBack();
             return false;
         }

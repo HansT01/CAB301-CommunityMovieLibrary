@@ -17,6 +17,8 @@ namespace cab301
             movies.Insert(new Movie("Comedy movie", MovieGenre.Comedy, MovieClassification.PG, 90, 25));
             movies.Insert(new Movie("Drama movie", MovieGenre.Drama, MovieClassification.PG, 120, 15));
             movies.Insert(new Movie("History movie", MovieGenre.History, MovieClassification.G, 60, 10));
+            movies.Insert(new Movie("Another movie", MovieGenre.History, MovieClassification.G, 60, 10));
+            movies.Insert(new Movie("Last movie", MovieGenre.History, MovieClassification.G, 60, 10));
 
             MovieLibraryGUI gui = new MovieLibraryGUI(movies, members);
         }

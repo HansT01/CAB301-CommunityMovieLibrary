@@ -1,6 +1,7 @@
 ﻿//CAB301 assessment 1 - 2022
 //The implementation of Member ADT
 using System;
+using System.Collections.Generic;
 
 public class Member : IMember
 {
@@ -9,6 +10,7 @@ public class Member : IMember
     private string lastName;
     private string contactNumber;
     private string pin;
+    private List<IMovie> borrowedMovies;
 
 
     // Properties
@@ -16,7 +18,7 @@ public class Member : IMember
     public string LastName { get { return lastName; } set { lastName = value; } }  // Get and set the last name of this member
     public string ContactNumber { get { return contactNumber; } set { contactNumber = value; } }  // Get and set the contact number of this member
     public string Pin { get { return pin; } set { pin = value; } }// Get and set a pin number
-
+    public List<IMovie> BorrowedMovies { get { return borrowedMovies; } }
 
 
     // Constructor with member's first name and lastname
@@ -24,6 +26,7 @@ public class Member : IMember
     {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.borrowedMovies = new List<IMovie>(5);
     }
 
     // Constructor with member's full details
@@ -35,6 +38,17 @@ public class Member : IMember
         this.pin = pin;
     }
 
+    /*private bool AddToBorrow(Movie movie)
+    {
+        if (borrowedMovies.Length <= 5)
+        {
+            borrowedMovies[borrowedMovies.Length] = movie;
+            return true;
+        } else
+        {
+            return false;
+        }
+    }*/
 
 
     // Define how to comapre two member objects
