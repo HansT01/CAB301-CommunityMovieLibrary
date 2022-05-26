@@ -535,10 +535,12 @@ namespace cab301
         {
             Console.Clear();
             Console.WriteLine("Movies the current users is currently borrowing: \n");
-            List<IMovie> borrowedMovies = ((Member)member).BorrowedMovies;
+            IMovieCollection borrowedMovies = ((Member)member).BorrowedMovies;
 
-            foreach (IMovie movie in borrowedMovies) {
-                Console.WriteLine(movie.ToString());
+            IMovie[] movieList = borrowedMovies.ToArray();
+            for (int i = 0; i < movieList.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {movieList[i].ToString()}");
             }
 
             /*// ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
@@ -615,10 +617,9 @@ namespace cab301
         private bool BorrowMovie(IMember member)
         {
             Console.Clear();
-            List<IMovie> borrowedMovies = ((Member)member).BorrowedMovies;
-            Console.WriteLine(borrowedMovies.Count);
+            IMovieCollection borrowedMovies = ((Member)member).BorrowedMovies;
 
-            if (borrowedMovies.Count < 5)
+            if (borrowedMovies.Number < 5)
             {
                 Console.WriteLine("Enter the title of a movie: ");
                 string movieTitle = Console.ReadLine();
@@ -626,7 +627,7 @@ namespace cab301
                 if (movie != null)
                 {
                     movie.AddBorrower(member);
-                    borrowedMovies.Add(movie);
+                    borrowedMovies.Insert(movie);
                     Console.WriteLine($"Borrowed a copy of '{movie.Title}' under the member '{member.LastName}, {member.FirstName}'.");
                 }
                 else
@@ -636,9 +637,8 @@ namespace cab301
                 }
             } else
             {
-                Console.WriteLine("You cannot borrow more than 5 DVDS.");
+                Console.WriteLine("You cannot hold more than 5 DVDs at the same time.");
             }
-
             
             EnterToGoBack();
             return false;
