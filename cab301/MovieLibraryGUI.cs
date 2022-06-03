@@ -57,7 +57,7 @@ namespace cab301
                     if (members.Number <= 0)
                     {
                         Console.Clear();
-                        Console.WriteLine("There is no register members in the system yet!");
+                        Console.WriteLine("\nThere is no register members in the system yet!");
                         Console.ReadLine();
                         return true;
                     }

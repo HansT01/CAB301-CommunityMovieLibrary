@@ -5,8 +5,8 @@ namespace cab301
     class Program
     {
         static void Main(string[] args)
-        {            
-            MovieCollection movies = new MovieCollection();
+        {
+            /*MovieCollection movies = new MovieCollection();
             MemberCollection members = new MemberCollection(100);
             members.Add(new Member("Johnny", "Yang")
             {
@@ -20,7 +20,35 @@ namespace cab301
             movies.Insert(new Movie("Another movie", MovieGenre.History, MovieClassification.G, 60, 10));
             movies.Insert(new Movie("Last movie", MovieGenre.History, MovieClassification.G, 60, 10));
 
-            MovieLibraryGUI gui = new MovieLibraryGUI(movies, members);
+            MovieLibraryGUI gui = new MovieLibraryGUI(movies, members);*/
+            int[] arr = {12, 45, 1, -1, 45, 54, 23, 5, 0, -10 };
+            Findthree(arr);
+        }
+
+        static void Findthree(int[] elements)
+        {
+            int[] topthree = new int[3];
+            for (int j = 0; j < 3; j++)
+            {
+                int max = elements[j];
+                topthree[j] = max;
+
+                for (int i = j + 1; i < elements.Length; i++)
+                {
+                    if ((elements[i] > max) 
+                        && (elements[i] != topthree[0])
+                        && (elements[i] != topthree[1]))
+                    {
+                        max = elements[i];
+                        topthree[j] = max;
+                    }
+                }
+            }
+
+            foreach (int i in topthree)
+            {
+                Console.WriteLine(i);
+            }
         }
     }
 }
