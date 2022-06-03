@@ -494,21 +494,29 @@ namespace cab301
         }
 
         // Renders the top k movies by number of borrowings
-        private bool ListTopMovies(int k)
+        private bool ListTop3Movies()
         {
             Console.Clear();
-            Console.WriteLine($"Top {k} movies rented by members: ");
+            Console.WriteLine($"Top 3 movies rented by members: ");
 
             // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
-            IMovie[] movieList = movies.ToArray();
+            IMovie[] topMovies = TopMoviesHeap(movies.ToArray(), 3);
 
-            // This implementation of a PriorityQueue is a min-heap.
-            // PriorityQueue insert method is O(nlog(m)), where m is the number of elements in the queue.
-            // Since m can't be higher than k, the worst-case time complexity is O(nlog(k)) for the top k elements.
-            PriorityQueue<IMovie, int> queue = new();
-            for (int i = 0; i < movieList.Length; i++)
+            for (int i = 0; i < topMovies.Length; i++)
             {
-                queue.Enqueue(movieList[i], movieList[i].NoBorrowings);
+                Console.WriteLine($"{i + 1}. '{topMovies[i].Title}' with {topMovies[i].NoBorrowings} borrowings");
+            }
+
+            EnterToGoBack();
+            return false;
+        }
+
+        private IMovie[] TopMoviesHeap(IMovie[] list, int k)
+        {
+            PriorityQueue<IMovie, int> queue = new();
+            for (int i = 0; i < list.Length; i++)
+            {
+                queue.Enqueue(list[i], list[i].NoBorrowings);
                 if (queue.Count > k)
                 {
                     queue.Dequeue();
@@ -521,14 +529,14 @@ namespace cab301
             {
                 topMovies[i] = queue.Dequeue();
             }
+            return topMovies;
+        }
 
-            for (int i = 0; i < topMovies.Length; i++)
-            {
-                Console.WriteLine($"{i + 1}. '{topMovies[i].Title}' with {topMovies[i].NoBorrowings} borrowings");
-            }
-
-            EnterToGoBack();
-            return false;
+        private IMovie[] TopMovies(IMovie[] list, int k)
+        {
+            // Some structure shit
+            IMovie[] topMovies = new IMovie[k];
+            return topMovies;
         }
 
         private bool ListBorrowingMovies(IMember member)
