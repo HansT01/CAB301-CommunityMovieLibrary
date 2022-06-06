@@ -324,8 +324,7 @@ namespace cab301
             Console.WriteLine("Enter the member's first name: ");
             string firstName = Console.ReadLine();
 
-            Console.Clear();
-            Console.WriteLine("Enter the member's last name: ");
+            Console.WriteLine("\nEnter the member's last name: ");
             string lastName = Console.ReadLine();
 
             if (!members.Search(new Member(firstName, lastName)))
@@ -334,7 +333,7 @@ namespace cab301
                 while (!IMember.IsValidContactNumber(contactNumber))
                 {
                     Console.Clear();
-                    Console.WriteLine("Enter the contact number: ");
+                    Console.WriteLine("Enter a valid contact number: ");
                     contactNumber = Console.ReadLine();
                 }
 
@@ -342,19 +341,23 @@ namespace cab301
                 while (!IMember.IsValidPin(pin))
                 {
                     Console.Clear();
-                    Console.WriteLine("Enter the pin: ");
+                    Console.WriteLine("Enter a valid pin: ");
                     pin = Console.ReadLine();
                 }
 
                 Member member = new(firstName, lastName, contactNumber, pin);
                 while (true)
                 {
+                    member.ToString();
                     Console.Clear();
                     Console.WriteLine(string.Join(
                         Environment.NewLine,
                         "Would you like to add the new member:",
                         " ",
-                        $"{member.FirstName}, {member.LastName}, {member.ContactNumber}, {member.Pin}"
+                        $"First name: {member.FirstName}",
+                        $"Last name: {member.LastName}",
+                        $"Contact number: {member.ContactNumber}",
+                        $"Pin: {member.Pin}"
                     ));
                     OptionSelect(new string[] {
                         "Register member and exit menu",
@@ -393,16 +396,20 @@ namespace cab301
         private bool RemoveMember()
         {
             Console.Clear();
-            Console.WriteLine("Enter the name of the member to be removed: ");
-            string userName = Console.ReadLine();
+            Console.WriteLine("Enter the member's first name: ");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("\nEnter the member's last name: ");
+            string lastName = Console.ReadLine();
 
-            string[] name = userName.Split('\u0020');
-
-            if (SearchMember(name))
+            IMember member = members.Find(new Member(firstName, lastName));
+            if (member == null)
             {
-                IMember member = members.Find(new Member(name[0], name[1]));
+                Console.WriteLine($"\nMember {lastName}, {firstName} not found.");
+            }
+            else
+            {
                 members.Delete(member);
-                Console.WriteLine($"Member {member.LastName}, {member.FirstName} has been removed.");
+                Console.WriteLine($"\nMember {member.LastName}, {member.FirstName} has been removed.");
             }
 
             EnterToGoBack();
@@ -412,14 +419,18 @@ namespace cab301
         private bool DisplayMemberPhoneNo()
         {
             Console.Clear();
-            Console.WriteLine("Enter the member's name: ");
-            string userName = Console.ReadLine();
+            Console.WriteLine("Enter the member's first name: ");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("\nEnter the member's last name: ");
+            string lastName = Console.ReadLine();
 
-            string[] name = userName.Split('\u0020');
-
-            if (SearchMember(name))
+            IMember member = members.Find(new Member(firstName, lastName));
+            if (member == null)
             {
-                IMember member = members.Find(new Member(name[0], name[1]));
+                Console.WriteLine($"\nMember with the '{lastName}, {firstName}' not found.");
+            }
+            else
+            {
                 Console.WriteLine($"\nThe member's phone number is: '{member.ContactNumber}'");
             }
 
@@ -712,16 +723,6 @@ namespace cab301
         {
             Console.WriteLine("\nPress enter to go back...");
             Console.ReadLine();
-        }
-
-        private bool SearchMember(string[] name)
-        {
-            if (!members.Search(new Member(name[0], name[1])))
-            {
-                Console.WriteLine("There is no such member.");
-                return false;
-            }
-            return true;
         }
     }
 }
