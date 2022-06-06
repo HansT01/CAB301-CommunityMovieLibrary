@@ -14,7 +14,7 @@ namespace cab301
         {
             this.movies = movies;
             this.members = members;
-            while (MainMenu());
+            while (MainMenu()) ;
         }
 
         private void OptionSelect(string[] options, string option0 = null)
@@ -92,27 +92,27 @@ namespace cab301
             {
                 case "1":
                     // Add new DVDs of a new movie to the system
-                    while (AddMovie());
+                    while (AddMovie()) ;
                     return true;
                 case "2":
                     // Remove DVDs of a movie from the system
-                    while (DeleteMovie());
+                    while (DeleteMovie()) ;
                     return true;
                 case "3":
                     // Register a new member with the system
-                    while (RegisterMember());
+                    while (RegisterMember()) ;
                     return true;
                 case "4":
                     // Remove a resitered member from the system
-                    while (RemoveMember());
+                    while (RemoveMember()) ;
                     return true;
                 case "5":
                     // Display a member's contact phone number, given the member's name
-                    while (DisplayMemberPhoneNo());
+                    while (DisplayMemberPhoneNo()) ;
                     return true;
                 case "6":
                     // Display all members who are currently renting a particular movie
-                    while (DisplayBorrowers());
+                    while (DisplayBorrowers()) ;
                     return true;
                 case "0":
                     // Return to the main menu
@@ -143,7 +143,7 @@ namespace cab301
             Console.WriteLine("Movie title: ");
             string title = Console.ReadLine();
 
-            Movie movie = (Movie) movies.Search(title);
+            Movie movie = (Movie)movies.Search(title);
             if (movie != null)
             {
                 Console.Clear();
@@ -234,7 +234,7 @@ namespace cab301
                 }
             }
 
-            movie = new Movie(title, (MovieGenre) genre, (MovieClassification) classification, duration, copies);
+            movie = new Movie(title, (MovieGenre)genre, (MovieClassification)classification, duration, copies);
             while (true)
             {
                 Console.Clear();
@@ -248,7 +248,8 @@ namespace cab301
                     "Add movie and exit menu",
                     "Redo input fields without adding movie"
                 }, "Exit without adding movie");
-                switch (Console.ReadLine()) {
+                switch (Console.ReadLine())
+                {
                     case "1":
                         // Add movie and exit menu
                         if (movies.Insert(movie))
@@ -280,11 +281,11 @@ namespace cab301
             Console.WriteLine("Enter the title: ");
 
             string title = Console.ReadLine();
-            Movie movie = (Movie) movies.Search(title);
+            Movie movie = (Movie)movies.Search(title);
 
             if (movie != null)
             {
-                Console.WriteLine("\n" + String.Join("\n", movie.ToString().Split(", ")));  
+                Console.WriteLine("\n" + String.Join("\n", movie.ToString().Split(", ")));
                 Console.WriteLine($"\nEnter the number of copies to remove from the movie: ");
                 try
                 {
@@ -384,7 +385,7 @@ namespace cab301
                             continue;
                     }
                 }
-            } 
+            }
 
             return false;
         }
@@ -403,7 +404,7 @@ namespace cab301
                 members.Delete(member);
                 Console.WriteLine($"Member {member.LastName}, {member.FirstName} has been removed.");
             }
-            
+
             EnterToGoBack();
             return false;
         }
@@ -414,14 +415,14 @@ namespace cab301
             Console.WriteLine("Enter the member's name: ");
             string userName = Console.ReadLine();
 
-            string[] name = userName.Split('\u0020');   
+            string[] name = userName.Split('\u0020');
 
             if (SearchMember(name))
             {
                 IMember member = members.Find(new Member(name[0], name[1]));
                 Console.WriteLine($"\nThe member's phone number is: '{member.ContactNumber}'");
             }
-            
+
             EnterToGoBack();
             return false;
         }
@@ -482,7 +483,7 @@ namespace cab301
                     return true;
                 case "6":
                     // Display the top 3 movies rented by the members
-                    while (ListTopMovies(3)) ;
+                    while (ListTop3Movies()) ;
                     return true;
                 case "0":
                     // Return to the main menu
@@ -500,7 +501,7 @@ namespace cab301
             Console.WriteLine($"Top 3 movies rented by members: ");
 
             // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
-            IMovie[] topMovies = TopMoviesHeap(movies.ToArray(), 3);
+            IMovie[] topMovies = TopMovies(movies.ToArray(), 3);
 
             for (int i = 0; i < topMovies.Length; i++)
             {
@@ -534,10 +535,37 @@ namespace cab301
 
         private IMovie[] TopMovies(IMovie[] list, int k)
         {
-            // Some structure shit
-            IMovie[] topMovies = new IMovie[k];
-            return topMovies;
+            // Top movies sorted array
+            IMovie[] topMovies = new IMovie[k + 1];
+            int count = 0;
+
+            for (int i = 0; i < list.Length; i++)
+            {
+                IMovie movie = list[i];
+
+                // Add new movie to sorted array
+                int pos = count - 1;
+                while ((pos >= 0) && (movie.NoBorrowings > topMovies[pos].NoBorrowings))
+                {
+                    topMovies[pos + 1] = topMovies[pos];
+                    pos--;
+                }
+                topMovies[pos + 1] = movie;
+
+                // Increment counter
+                if (count < k) count++;
+            }
+
+            // Reduce and return result
+            IMovie[] result = new IMovie[count];
+            for (int i = 0; i < count; i++)
+            {
+                result[i] = topMovies[i];
+            }
+            return result;
         }
+
+
 
         private bool ListBorrowingMovies(IMember member)
         {
@@ -550,26 +578,6 @@ namespace cab301
             {
                 Console.WriteLine($"{i + 1}. {movieList[i].ToString()}");
             }
-
-            /*// ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
-            IMovie[] movieList = movies.ToArray();
-
-            // Looping through the list of movies and searching for a member has a time complexity of O(nlog(m)).
-            IMovie[] borrowedMovies = new IMovie[movieList.Length];
-            int count = 0;
-            for (int i = 0; i < movieList.Length; i++)
-            {
-                if (movieList[i].Borrowers.Search(member))
-                {
-                    borrowedMovies[count] = movieList[i];
-                    count++;
-                }
-            }
-
-            for (int i = 0; i < count; i++)
-            {
-                Console.WriteLine(borrowedMovies[i].ToString());
-            }*/
 
             EnterToGoBack();
             return false;
@@ -643,11 +651,12 @@ namespace cab301
 
                     Console.WriteLine($"No movie titled '{movieTitle}' was found.");
                 }
-            } else
+            }
+            else
             {
                 Console.WriteLine("You cannot hold more than 5 DVDs at the same time.");
             }
-            
+
             EnterToGoBack();
             return false;
         }
@@ -690,7 +699,7 @@ namespace cab301
         private bool VerifyStaff()
         {
             Console.Clear();
-            Console.WriteLine("Enter your name/username: ");
+            Console.WriteLine("Enter your username: ");
             string userName = Console.ReadLine();
             Console.WriteLine("\nEnter your password: ");
             string password = Console.ReadLine();
