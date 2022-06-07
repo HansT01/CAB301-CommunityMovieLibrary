@@ -274,7 +274,7 @@ namespace cab301
             }
         }
 
-        // TODO code might need some cleaning up - will look into it later
+        // TODO code might need some cleaning up - will loo k into it later
         private bool DeleteMovie()
         {
             Console.Clear();
@@ -511,7 +511,6 @@ namespace cab301
             Console.Clear();
             Console.WriteLine($"Top 3 movies rented by members: ");
 
-            // ToArray method has a time complexity of O(n), where n is the number of movies in the movies array.
             IMovie[] topMovies = TopMovies(movies.ToArray(), 3);
 
             for (int i = 0; i < topMovies.Length; i++)
@@ -523,60 +522,36 @@ namespace cab301
             return false;
         }
 
-        private IMovie[] TopMoviesHeap(IMovie[] list, int k)
+        private IMovie[] TopMovies(IMovie[] movies, int k)
         {
+            // heap ← MinHeap<object>
             PriorityQueue<IMovie, int> queue = new();
-            for (int i = 0; i < list.Length; i++)
+            // for element in arr do
+            for (int i = 0; i < movies.Length; i++)
             {
-                queue.Enqueue(list[i], list[i].NoBorrowings);
+                // heap.insert(element)
+                queue.Enqueue(movies[i], movies[i].NoBorrowings);
+                // if heap.size > k
                 if (queue.Count > k)
                 {
+                    // heap.delete()
                     queue.Dequeue();
                 }
             }
 
-            // Get the top movies in descending order by borrower count
+            // topElements ← Object[heap.size]
             IMovie[] topMovies = new IMovie[queue.Count];
+            // for i ← heap.size - 1 to 0 do
             for (int i = queue.Count - 1; i >= 0; i--)
             {
+                // topElements[i] ← heap.peek()
+                // heap.delete()
                 topMovies[i] = queue.Dequeue();
             }
+
+            // return topElements
             return topMovies;
         }
-
-        private IMovie[] TopMovies(IMovie[] list, int k)
-        {
-            // Top movies sorted array
-            IMovie[] topMovies = new IMovie[k + 1];
-            int count = 0;
-
-            for (int i = 0; i < list.Length; i++)
-            {
-                IMovie movie = list[i];
-
-                // Add new movie to sorted array
-                int pos = count - 1;
-                while ((pos >= 0) && (movie.NoBorrowings > topMovies[pos].NoBorrowings))
-                {
-                    topMovies[pos + 1] = topMovies[pos];
-                    pos--;
-                }
-                topMovies[pos + 1] = movie;
-
-                // Increment counter
-                if (count < k) count++;
-            }
-
-            // Reduce and return result
-            IMovie[] result = new IMovie[count];
-            for (int i = 0; i < count; i++)
-            {
-                result[i] = topMovies[i];
-            }
-            return result;
-        }
-
-
 
         private bool ListBorrowingMovies(IMember member)
         {
