@@ -28,11 +28,10 @@ namespace cab301
             MovieCollection GenerateMovies(int k)
             {
                 MovieCollection movies = new();
-                Random random = new();
                 for (int i = 0; i < k; i++)
                 {
                     Movie movie = new(GenerateString(12));
-                    movie.NoBorrowings = random.Next();
+                    movie.NoBorrowings = r.Next();
                     movies.Insert(movie);
                 }
                 return movies;
@@ -42,6 +41,7 @@ namespace cab301
             for (int i = 10000; i <= 200000; i += 10000)
             {
                 MovieCollection movies = GenerateMovies(i);
+
                 DateTime startTime = DateTime.Now;
                 MovieLibraryGUI.TopMovies(movies.ToArray(), 3);
                 DateTime endTime = DateTime.Now;
