@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace cab301
 {
@@ -522,7 +521,7 @@ namespace cab301
             return false;
         }
 
-        private IMovie[] TopMovies(IMovie[] movies, int k)
+        static public IMovie[] TopMovies(IMovie[] movies, int k)
         {
             // heap ← MinHeap<object>
             PriorityQueue<IMovie, int> queue = new();
